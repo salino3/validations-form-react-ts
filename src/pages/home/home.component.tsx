@@ -24,7 +24,11 @@ export const Home: React.FC = () => {
 
    //!
 const [isEmailValid, setIsEmailValid] = React.useState< boolean | null>();
-const [firstValue, setFirstValue] = React.useState(false)
+const [firstValue, setFirstValue] = React.useState(false);
+const [isPasswordStrong, setIsPasswordStrong] = React.useState<boolean | null>();
+
+ 
+
    //!
 
    const [user, setUser] =
@@ -102,13 +106,16 @@ const [firstValue, setFirstValue] = React.useState(false)
        setStartValidationColor({ ...startValidationColor, password: true });
      }
 
-     return user.password
-       ? /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9\d])(?=.*\d).{8,}/.test(
-           user.password
-         )
-       : null;
+     const bool = user.password
+        ? /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9\d])(?=.*\d).{8,}/.test(
+            user.password
+          )
+        : null;
+        setIsPasswordStrong(bool);
+        return bool;
    };
 
+   //
    const isPasswordConfirmed = () => {
      if (
        user.confirmPassword !== "" &&
@@ -120,9 +127,12 @@ const [firstValue, setFirstValue] = React.useState(false)
        });
      }
 
-     return user.confirmPassword
-       ? user.password === user.confirmPassword
-       : null;
+    //  const bool = user.confirmPassword ? user.password === user.confirmPassword : null;
+    //  setIsPasswordStrong;(bool);
+    //   return bool;
+    return user.confirmPassword
+        ? user.password === user.confirmPassword
+        : null;
    };
 
    const isMajor = () => {
@@ -158,6 +168,17 @@ const [firstValue, setFirstValue] = React.useState(false)
    React.useEffect(() => {
      isMajor();
    }, [user.age]);
+   //
+    const handlePassword = (e: any) => {
+      setUser({ ...user, password: e.target.value });
+
+      isStrongPassword();
+    };
+
+    React.useEffect(() => {
+      isStrongPassword();
+    }, [isPasswordStrong, user.password]);
+
 
 
   return (
@@ -184,12 +205,55 @@ const [firstValue, setFirstValue] = React.useState(false)
           Invalid email address!
         </span>
         <br />
-
+        {/* Problema1 */}
+        <input
+          className={
+            isPasswordStrong === true
+              ? "valid"
+              : isPasswordStrong === false ||
+                (startValidationColor.password && !isPasswordStrong)
+              ? "invalid"
+              : ""
+          }
+          value={user.password}
+          onChange={handlePassword}
+          type="password"
+          placeholder="Password.."
+        />
+        <br />
+        <span className="errorText">
+          {user.password !== "" && !isPasswordStrong && "Weak password!"}
+        </span>
+        <br />
+        <input
+          className={
+            user.password !== user.confirmPassword
+              ? "passwordConfirmed"
+              : isPasswordConfirmed() === true
+              ? "valid"
+              : isPasswordConfirmed() === false ||
+                (startValidationColor.confirmPassword && !isPasswordConfirmed())
+              ? "invalid"
+              : ""
+          }
+          value={user.confirmPassword}
+          onChange={(e) =>
+            setUser({ ...user, confirmPassword: e.target.value })
+          }
+          type="password"
+          placeholder="Confirm password"
+        />
+        <br />
+        <span className="errorText">
+          {user.confirmPassword !== "" &&
+            !isPasswordConfirmed() &&
+            "Repeat password!"}
+        </span>
+        <br />
 
         <input
           className={
-       (firstValue && (user.age < 18 ||
-            startValidationColor.age === null ))
+            firstValue && (user.age < 18 || startValidationColor.age === null)
               ? "invalid"
               : user && user?.age && user?.age >= 18
               ? "valid"
@@ -204,10 +268,7 @@ const [firstValue, setFirstValue] = React.useState(false)
         <br />
         <span
           className="errorText"
-          hidden={
-            user.age === null ||
-            (user.age !== null && user.age >= 18)
-          }
+          hidden={user.age === null || (user.age !== null && user.age >= 18)}
         >
           You must be Major!
         </span>
