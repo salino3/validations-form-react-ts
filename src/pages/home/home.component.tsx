@@ -163,10 +163,10 @@ const [isPasswordStrong, setIsPasswordStrong] = React.useState<boolean | null>()
 
      isMajor();
      setFirstValue(true);
-   };
-
-   React.useEffect(() => {
-     isMajor();
+    };
+    
+    React.useEffect(() => {
+      isMajor();
    }, [user.age]);
    //
     const handlePassword = (e: any) => {
@@ -268,7 +268,11 @@ const [isPasswordStrong, setIsPasswordStrong] = React.useState<boolean | null>()
         <br />
         <span
           className="errorText"
-          hidden={user.age === null || (user.age !== null && user.age >= 18)}
+          hidden={
+            (user.age !== null && user.age >= 18) ||
+            (isNaN(user.age) && firstValue) ||
+            (user.age === null && !firstValue)
+          }
         >
           You must be Major!
         </span>
