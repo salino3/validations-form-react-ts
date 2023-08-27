@@ -1,29 +1,30 @@
 import React from 'react';
 import './home.styles.scss';
 
-interface UserProps {
-  email: string;
-  password: string;
-  confirmPassword: string;
-  age: number | null;
-  sex: string;
-  dev: string;
+interface startValidationColorProps {
+  email: boolean | null;
+  password: boolean | null;
+  confirmPassword: boolean | null;
+  age: boolean | null;
+  sex:  boolean | null;
+  dev:  boolean | null;
 };
 
 export const Home: React.FC = () => {
    const [startValidation, setStartValidation] = React.useState(false);
-   const [startValidationColor, setStartValidationColor] = React.useState({
-     email: false,
-     password: false,
-     confirmPassword: false,
-     age: false,
-     sex: false,
-     dev: false,
-   });
+   const [startValidationColor, setStartValidationColor] =
+     React.useState<startValidationColorProps>({
+       email: false,
+       password: false,
+       confirmPassword: false,
+       age: false,
+       sex: false,
+       dev: false,
+     });
 
    //!
-const [isEmailValid, setIsEmailValid] = React.useState < boolean | null>();
-
+const [isEmailValid, setIsEmailValid] = React.useState< boolean | null>();
+const [firstValue, setFirstValue] = React.useState(false)
    //!
 
    const [user, setUser] =
@@ -87,11 +88,6 @@ const [isEmailValid, setIsEmailValid] = React.useState < boolean | null>();
        setStartValidationColor({ ...startValidationColor, email: true });
      }
 
-    //  return user.email
-    //    ?
-    //     /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(user.email)
-    //    : null;
-    
      const emailValid = user.email
        ? /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(user.email)
        : null;
@@ -130,14 +126,18 @@ const [isEmailValid, setIsEmailValid] = React.useState < boolean | null>();
    };
 
    const isMajor = () => {
-     if (user.age !== null) {
+      
+      if(user.age && user.age < 18){
+        const bool = user && user?.age && user?.age >= 18 ? true : null;
+        setStartValidationColor({ ...startValidationColor, age: bool });
+     }
+      if (user.age >= 18)  {
        setStartValidationColor({ ...startValidationColor, age: false });
      }
-
-     return startValidation ? user && user?.age && user?.age >= 18 : null;
+     return true;
    };
-
-   const changing = (e: any) => {
+   
+   const handleEmail = (e: any) => {
     setUser({ ...user, email: e.target.value });
 
     isValidEmail();
@@ -146,6 +146,19 @@ const [isEmailValid, setIsEmailValid] = React.useState < boolean | null>();
      React.useEffect(() => {
        isValidEmail();
      }, [isEmailValid, user.email]);
+
+     //
+   const handleAge = (e: any) => {
+  setUser({ ...user, age: parseInt(e.target.value) });
+
+     isMajor();
+     setFirstValue(true);
+   };
+
+   React.useEffect(() => {
+     isMajor();
+   }, [user.age]);
+
 
   return (
     <div>
@@ -162,37 +175,28 @@ const [isEmailValid, setIsEmailValid] = React.useState < boolean | null>();
                : ""
            }`}
           value={user.email}
-          onChange={changing}
+          onChange={handleEmail}
           type="text"
           placeholder="Email.."
         />
         <br />
-        <span
-          className="errorText"
-          hidden={isEmailValid || user.email === ""}
-        >
+        <span className="errorText" hidden={isEmailValid || user.email === ""}>
           Invalid email address!
         </span>
         <br />
 
-        {/* Similar adjustments for other input fields */}
 
         <input
           className={
-            user && user?.age && user?.age >= 18
-              ? "valid"
-              : isMajor() === false ||
-                (startValidationColor.age && !isMajor) ||
-                (user.age !== null && !isMajor && user.age < 18)
+       (firstValue && (user.age < 18 ||
+            startValidationColor.age === null ))
               ? "invalid"
+              : user && user?.age && user?.age >= 18
+              ? "valid"
               : ""
           }
           value={user.age || ""}
-          onChange={(e) => {
-            const age = parseInt(e.target.value);
-            setUser({ ...user, age: isNaN(age) ? null : age });
-            // Perform age validation logic and update isMajor accordingly
-          }}
+          onChange={handleAge}
           type="number"
           min="0"
           placeholder="Age.."
@@ -202,7 +206,6 @@ const [isEmailValid, setIsEmailValid] = React.useState < boolean | null>();
           className="errorText"
           hidden={
             user.age === null ||
-            isMajor() ||
             (user.age !== null && user.age >= 18)
           }
         >
