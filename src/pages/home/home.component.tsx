@@ -25,9 +25,10 @@ export const Home: React.FC = () => {
    //!
 const [isEmailValid, setIsEmailValid] = React.useState< boolean | null>();
 const [firstValueAge, setFirstValueAge] = React.useState(false);
-// const [firstValueConfirmedPsw, setFirstValueConfirmedPsw] = React.useState(false);
 const [isPasswordStrong, setIsPasswordStrong] = React.useState<boolean | null>();
+const [firstValuePswStrong, setFirstValuePswStrong] = React.useState<boolean | null>(false);
 const [isConfirmedPassword, setIsConfirmedPassword] = React.useState<boolean | null>();
+// const [firstValueConfirmedPsw, setFirstValueConfirmedPsw] = React.useState(false);
  
 
    //!
@@ -70,24 +71,28 @@ const [isConfirmedPassword, setIsConfirmedPassword] = React.useState<boolean | n
        dev: true,
      });
 
-     if (user.age === null){
-      setFirstValueAge(true);
+     if (user.age === null) {
+       setFirstValueAge(true);
      };
-     
-       if (
-         isValidEmail() &&
-         isStrongPassword() &&
-         isPasswordConfirmed() &&
-         isMajor() &&
-         user.sex &&
-         user.dev
-       ) {
-         alert("Registering...");
-         console.log(JSON.stringify(user, null, 2));
-       } else {
-         alert("You have some error in the Form...");
-         console.log(user);
-       }
+
+     if (user.password === "") {
+       setFirstValuePswStrong(true);
+     };
+
+     if (
+       isValidEmail() &&
+       isStrongPassword() &&
+       isPasswordConfirmed() &&
+       isMajor() &&
+       user.sex &&
+       user.dev
+     ) {
+       //  alert("Registering...");
+       console.log(JSON.stringify(user, null, 2));
+     } else {
+       //  alert("You have some error in the Form...");
+       console.log(user);
+     }
 
      setStartValidation(false);
    };
@@ -227,7 +232,8 @@ const [isConfirmedPassword, setIsConfirmedPassword] = React.useState<boolean | n
             isPasswordStrong === true
               ? "valid"
               : isPasswordStrong === false ||
-                (startValidationColor.password && !isPasswordStrong)
+                (startValidationColor.password && !isPasswordStrong) ||
+                firstValuePswStrong
               ? "invalid"
               : ""
           }
@@ -273,7 +279,7 @@ const [isConfirmedPassword, setIsConfirmedPassword] = React.useState<boolean | n
             (firstValueAge &&
               (user.age < 18 || startValidationColor.age === null)) ||
             isNaN(user.age) ||
-            user.age === null && firstValueAge
+            (user.age === null && firstValueAge)
               ? "invalid"
               : user && user?.age && user?.age >= 18
               ? "valid"
@@ -291,7 +297,7 @@ const [isConfirmedPassword, setIsConfirmedPassword] = React.useState<boolean | n
           hidden={
             (user.age !== null && user.age >= 18) ||
             (isNaN(user.age) && firstValueAge) ||
-            user.age === null 
+            user.age === null
           }
         >
           You must be Major!

@@ -40,13 +40,13 @@
 }
 
 .valid {
-    background: url('emblemok_103757.svg') no-repeat right;
+    background: url('/public/emblemok_103757.svg') no-repeat right;
     background-size: auto 100%;
     background-color: aqua;
 }
 
 .invalid {
-    background: url('/icons8-x-16.png') no-repeat right;
+    background: url('/public/icons8-x-16.png') no-repeat right;
     background-color: tomato;
     background-size: 20px 20px;
 }
