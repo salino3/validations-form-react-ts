@@ -19,15 +19,17 @@ export const Home: React.FC = () => {
        confirmPassword: false,
        age: false,
        sex: false,
-       dev: false,
+       dev: null,
      });
 
    //!
 const [isEmailValid, setIsEmailValid] = React.useState< boolean | null>();
 const [firstValueAge, setFirstValueAge] = React.useState(false);
-// const [firstValueConfirmedPsw, setFirstValueConfirmedPsw] = React.useState(false);
 const [isPasswordStrong, setIsPasswordStrong] = React.useState<boolean | null>();
+const [firstValuePswStrong, setFirstValuePswStrong] = React.useState<boolean | null>(false);
 const [isConfirmedPassword, setIsConfirmedPassword] = React.useState<boolean | null>();
+// const [firstValueConfirmedPsw, setFirstValueConfirmedPsw] = React.useState(false);
+const [firstValuedDev, setfirstValuedDev] = React.useState<boolean | null>(null)
  
 
    //!
@@ -70,10 +72,19 @@ const [isConfirmedPassword, setIsConfirmedPassword] = React.useState<boolean | n
        dev: true,
      });
 
-     if (user.age === null){
-      setFirstValueAge(true);
+     if (user.age === null) {
+       setFirstValueAge(true);
      };
-     
+
+     if (user.password === "") {
+       setFirstValuePswStrong(true);
+     };
+
+     if (user.dev === ""){
+      setfirstValuedDev(false)
+     };
+
+
        if (
          isValidEmail() &&
          isStrongPassword() &&
@@ -82,10 +93,10 @@ const [isConfirmedPassword, setIsConfirmedPassword] = React.useState<boolean | n
          user.sex &&
          user.dev
        ) {
-         alert("Registering...");
+         //  alert("Registering...");
          console.log(JSON.stringify(user, null, 2));
        } else {
-         alert("You have some error in the Form...");
+         //  alert("You have some error in the Form...");
          console.log(user);
        }
 
@@ -194,8 +205,23 @@ const [isConfirmedPassword, setIsConfirmedPassword] = React.useState<boolean | n
     React.useEffect(() => {
       isPasswordConfirmed();
     }, [isConfirmedPassword, user.confirmPassword]);
+//
 
-
+   const handleDev = (e: any) => {
+     setUser({ ...user, dev: e.target.value });
+console.log("handleDev", user.dev);
+setfirstValuedDev(true);
+    
+   };
+    React.useEffect(() => {
+       if (user.dev !== "") {
+         setStartValidationColor({ ...startValidationColor, dev: true });
+       } 
+       if (user.dev === "" && firstValuedDev) {
+         setStartValidationColor({ ...startValidationColor, dev: false });
+       }
+       console.log("handleDev2", startValidationColor.dev);
+    }, [isConfirmedPassword, user.dev]);
 
   return (
     <div>
@@ -227,7 +253,8 @@ const [isConfirmedPassword, setIsConfirmedPassword] = React.useState<boolean | n
             isPasswordStrong === true
               ? "valid"
               : isPasswordStrong === false ||
-                (startValidationColor.password && !isPasswordStrong)
+                (startValidationColor.password && !isPasswordStrong) ||
+                firstValuePswStrong
               ? "invalid"
               : ""
           }
@@ -267,13 +294,12 @@ const [isConfirmedPassword, setIsConfirmedPassword] = React.useState<boolean | n
               "Repeat password!")}
         </span>
         <br />
-
         <input
           className={
             (firstValueAge &&
               (user.age < 18 || startValidationColor.age === null)) ||
             isNaN(user.age) ||
-            user.age === null && firstValueAge
+            (user.age === null && firstValueAge)
               ? "invalid"
               : user && user?.age && user?.age >= 18
               ? "valid"
@@ -291,19 +317,26 @@ const [isConfirmedPassword, setIsConfirmedPassword] = React.useState<boolean | n
           hidden={
             (user.age !== null && user.age >= 18) ||
             (isNaN(user.age) && firstValueAge) ||
-            user.age === null 
+            user.age === null
           }
         >
           You must be Major!
         </span>
         <br />
 
-        <div>
+        <div className="boxDev">
           <label htmlFor="dev">What developer are you?</label> &nbsp;
           <select
+            className={` ${
+              startValidationColor.dev === true
+                ? "validSelect"
+                : startValidationColor.dev === false
+                ? "invalidSelect"
+                : ""
+            } ${firstValuedDev === false ? "validSelect" : ""} `}
             value={user.dev}
             id="dev"
-            onChange={(e) => setUser({ ...user, dev: e.target.value })}
+            onChange={handleDev}
           >
             <option value="">..</option>
             <option value="Front-end">Front-end</option>
@@ -312,8 +345,8 @@ const [isConfirmedPassword, setIsConfirmedPassword] = React.useState<boolean | n
           </select>
         </div>
         <br />
-
         <div>
+          //!
           <p>Your sex:</p>
           <label htmlFor="Male">Male</label>
           <input
@@ -333,7 +366,6 @@ const [isConfirmedPassword, setIsConfirmedPassword] = React.useState<boolean | n
           />
         </div>
         <br />
-
         <button type="submit" disabled={startValidation}>
           Register
         </button>

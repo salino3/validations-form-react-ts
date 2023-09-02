@@ -1,9 +1,21 @@
 
-.muForm input{
-  
+.myForm input{
     border-radius: 8px;
     padding: 3px;
     align-self: center;
+}
+
+.boxDev {
+  align-self: center;
+  padding-right: 50px;
+}
+
+ #dev{
+  
+    border-radius: 8px;
+    padding: 3px;
+    border: solid 1px gray;
+    width: 350px;
 }
 
 .myForm button {
@@ -40,17 +52,31 @@
 }
 
 .valid {
-    background: url('emblemok_103757.svg') no-repeat right;
+    background: url('/public/emblemok_103757.svg') no-repeat right;
     background-size: auto 100%;
     background-color: aqua;
 }
 
 .invalid {
-    background: url('/icons8-x-16.png') no-repeat right;
+    background: url('/public/icons8-x-16.png') no-repeat right;
     background-color: tomato;
     background-size: 20px 20px;
 }
 
 .errorText {
   color: red;
+}
+
+
+.validSelect {
+    background: url('/public/emblemok_103757.svg') no-repeat calc(100% - 20px) center;
+    background-size: auto 100%;
+    background-color: aqua;
+
+}
+
+.invalidSelect {
+    background: url('/public/icons8-x-16.png') no-repeat calc(100% - 20px) center;
+    background-color: tomato;
+    background-size: 20px 20px;
 }
