@@ -54,8 +54,9 @@
       display: flex;
       align-items: center;
       border: solid 1px gray;
+      width: 200px;
       border-radius: 5px;
-      padding: 8px;
+      padding: 8px 0px 8px 8px;
       
     }
     & input {
@@ -82,7 +83,7 @@
 }
 
 .valid {
-    background: url('/public/emblemok_103757.svg') no-repeat right;
+    background: url('/public/emblemok_103757.svg') no-repeat calc(100% - 2px) center;
     background-size: auto 100%;
     background-color: aqua;
     background-size: 20px 20px;
@@ -90,7 +91,7 @@
 }
 
 .invalid {
-    background: url('/public/icons8-x-16.png') no-repeat right;
+    background: url('/public/icons8-x-16.png') no-repeat calc(100% - 2px) center;
     background-color: tomato;
     background-size: 20px 20px;
 }
@@ -104,11 +105,38 @@
     background: url('/public/emblemok_103757.svg') no-repeat calc(100% - 20px) center;
     background-size: auto 100%;
     background-color: aqua;
-
 }
 
 .invalidPadding {
-    background: url('/public/icons8-x-16.png') no-repeat calc(100% - 16px) center;
+    background: url('/public/icons8-x-16.png') no-repeat calc(100% - 20px) center;
     background-color: tomato;
     background-size: 20px 20px;
 }
+
+.validPseudoClass:focus {
+    background: url('/public/emblemok_103757.svg') no-repeat calc(100% - 25px) center;
+    background-size: auto 100%;
+    background-color: aqua;
+}
+
+.validPseudoClass:hover {
+    background: url('/public/emblemok_103757.svg') no-repeat calc(100% - 25px) center;
+    background-size: auto 100%;
+    background-color: aqua;
+}
+
+.invalidPseudoClass:focus {
+    background: url('/public/icons8-x-16.png') no-repeat calc(100% - 25px) center;
+    background-color: tomato;
+    background-size: 20px 20px;
+}
+
+.invalidPseudoClass:hover {
+    background: url('/public/icons8-x-16.png') no-repeat calc(100% - 25px) center;
+    background-color: tomato;
+    background-size: 20px 20px;
+}
+
+
+
+
