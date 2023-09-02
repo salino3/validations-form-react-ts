@@ -24,9 +24,10 @@ export const Home: React.FC = () => {
 
    //!
 const [isEmailValid, setIsEmailValid] = React.useState< boolean | null>();
-const [firstValue, setFirstValue] = React.useState(false);
+const [firstValueAge, setFirstValueAge] = React.useState(false);
+// const [firstValueConfirmedPsw, setFirstValueConfirmedPsw] = React.useState(false);
 const [isPasswordStrong, setIsPasswordStrong] = React.useState<boolean | null>();
-
+const [isConfirmedPassword, setIsConfirmedPassword] = React.useState<boolean | null>();
  
 
    //!
@@ -69,20 +70,24 @@ const [isPasswordStrong, setIsPasswordStrong] = React.useState<boolean | null>()
        dev: true,
      });
 
-     if (
-       isValidEmail() &&
-       isStrongPassword() &&
-       isPasswordConfirmed() &&
-       isMajor() &&
-       user.sex &&
-       user.dev
-     ) {
-       alert("Registering...");
-       console.log(JSON.stringify(user, null, 2));
-     } else {
-       alert("You have some error in the Form...");
-       console.log(user);
-     }
+     if (user.age === null){
+      setFirstValueAge(true);
+     };
+     
+       if (
+         isValidEmail() &&
+         isStrongPassword() &&
+         isPasswordConfirmed() &&
+         isMajor() &&
+         user.sex &&
+         user.dev
+       ) {
+         alert("Registering...");
+         console.log(JSON.stringify(user, null, 2));
+       } else {
+         alert("You have some error in the Form...");
+         console.log(user);
+       }
 
      setStartValidation(false);
    };
@@ -127,12 +132,12 @@ const [isPasswordStrong, setIsPasswordStrong] = React.useState<boolean | null>()
        });
      }
 
-    //  const bool = user.confirmPassword ? user.password === user.confirmPassword : null;
-    //  setIsPasswordStrong;(bool);
-    //   return bool;
-    return user.confirmPassword
-        ? user.password === user.confirmPassword
-        : null;
+      const bool = user.confirmPassword ? user.password === user.confirmPassword : null;
+      setIsConfirmedPassword(bool);
+       return bool;
+    //  return user.confirmPassword
+    //    ? user.password === user.confirmPassword
+    //    : null;
    };
 
    const isMajor = () => {
@@ -162,7 +167,7 @@ const [isPasswordStrong, setIsPasswordStrong] = React.useState<boolean | null>()
   setUser({ ...user, age: parseInt(e.target.value) });
 
      isMajor();
-     setFirstValue(true);
+     setFirstValueAge(true);
     };
     
     React.useEffect(() => {
@@ -178,6 +183,17 @@ const [isPasswordStrong, setIsPasswordStrong] = React.useState<boolean | null>()
     React.useEffect(() => {
       isStrongPassword();
     }, [isPasswordStrong, user.password]);
+
+//
+   const handleConfirmPassword = (e: any) => {
+     setUser({ ...user, confirmPassword: e.target.value });
+
+     isStrongPassword();
+   };
+
+    React.useEffect(() => {
+      isPasswordConfirmed();
+    }, [isConfirmedPassword, user.confirmPassword]);
 
 
 
@@ -229,31 +245,35 @@ const [isPasswordStrong, setIsPasswordStrong] = React.useState<boolean | null>()
           className={
             user.password !== user.confirmPassword
               ? "passwordConfirmed"
-              : isPasswordConfirmed() === true
+              : isConfirmedPassword === true
               ? "valid"
-              : isPasswordConfirmed() === false ||
-                (startValidationColor.confirmPassword && !isPasswordConfirmed())
+              : isConfirmedPassword === false ||
+                (startValidationColor.confirmPassword && !isConfirmedPassword)
               ? "invalid"
               : ""
           }
           value={user.confirmPassword}
-          onChange={(e) =>
-            setUser({ ...user, confirmPassword: e.target.value })
-          }
+          onChange={handleConfirmPassword}
           type="password"
           placeholder="Confirm password"
         />
         <br />
         <span className="errorText">
-          {user.confirmPassword !== "" &&
-            !isPasswordConfirmed() &&
-            "Repeat password!"}
+          {(user.password !== user.confirmPassword &&
+            user.confirmPassword !== "" &&
+            "Repeat password!") ||
+            (user.confirmPassword !== "" &&
+              !isConfirmedPassword &&
+              "Repeat password!")}
         </span>
         <br />
 
         <input
           className={
-            firstValue && (user.age < 18 || startValidationColor.age === null)
+            (firstValueAge &&
+              (user.age < 18 || startValidationColor.age === null)) ||
+            isNaN(user.age) ||
+            user.age === null && firstValueAge
               ? "invalid"
               : user && user?.age && user?.age >= 18
               ? "valid"
@@ -270,8 +290,8 @@ const [isPasswordStrong, setIsPasswordStrong] = React.useState<boolean | null>()
           className="errorText"
           hidden={
             (user.age !== null && user.age >= 18) ||
-            (isNaN(user.age) && firstValue) ||
-            (user.age === null && !firstValue)
+            (isNaN(user.age) && firstValueAge) ||
+            user.age === null 
           }
         >
           You must be Major!
