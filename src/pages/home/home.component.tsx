@@ -18,7 +18,7 @@ export const Home: React.FC = () => {
        password: false,
        confirmPassword: false,
        age: false,
-       sex: false,
+       sex: null,
        dev: null,
      });
 
@@ -52,12 +52,14 @@ const [firstValuedDev, setfirstValuedDev] = React.useState<boolean | null>(null)
        setUser({ ...user, sex: "Male" });
        setIsMaleChecked(true);
        setIsFemaleChecked(false);
-     }
+       setStartValidationColor({ ...startValidationColor, sex: true });
+     };
      if (sex === "Female") {
        setUser({ ...user, sex: "Female" });
        setIsMaleChecked(false);
        setIsFemaleChecked(true);
-     }
+       setStartValidationColor({ ...startValidationColor, sex: true });
+     };
    };
 
    const register = (event: any) => {
@@ -82,6 +84,10 @@ const [firstValuedDev, setfirstValuedDev] = React.useState<boolean | null>(null)
 
      if (user.dev === ""){
       setfirstValuedDev(false)
+     };
+
+     if (!startValidationColor.sex){
+      setStartValidationColor({ ...startValidationColor , sex: false});
      };
 
 
@@ -271,7 +277,7 @@ setfirstValuedDev(true);
         <input
           className={
             user.password !== user.confirmPassword
-              ? "passwordConfirmed"
+              ? "passwordNotConfirmed"
               : isConfirmedPassword === true
               ? "valid"
               : isConfirmedPassword === false ||
@@ -329,11 +335,11 @@ setfirstValuedDev(true);
           <select
             className={` ${
               startValidationColor.dev === true
-                ? "validSelect"
+                ? "validPadding"
                 : startValidationColor.dev === false
-                ? "invalidSelect"
+                ? "invalidPadding"
                 : ""
-            } ${firstValuedDev === false ? "validSelect" : ""} `}
+            } ${firstValuedDev === false ? "invalidPadding" : ""} `}
             value={user.dev}
             id="dev"
             onChange={handleDev}
@@ -345,25 +351,32 @@ setfirstValuedDev(true);
           </select>
         </div>
         <br />
-        <div>
-          //!
-          <p>Your sex:</p>
-          <label htmlFor="Male">Male</label>
-          <input
-            checked={isMaleChecked}
-            id="Male"
-            type="checkbox"
-            className="inputCheckBox"
-            onChange={() => onChangeSex("Male")}
-          />
-          &nbsp;
-          <label htmlFor="Female">Female</label>
-          <input
-            checked={isFemaleChecked}
-            type="checkbox"
-            className="inputCheckBox"
-            onChange={() => onChangeSex("Female")}
-          />
+        <div className='inputsCheckBox' >
+          <label>Your sex:</label> &nbsp; &nbsp;
+          <div
+            className={`${
+              startValidationColor.sex
+                ? "valid"
+                : startValidationColor.sex === false
+                ? "invalidPadding"
+                : ""
+            } `}
+          >
+            <label htmlFor="Male">Male</label>
+            <input
+              checked={isMaleChecked}
+              id="Male"
+              type="checkbox"
+              onChange={() => onChangeSex("Male")}
+            />
+            &nbsp;
+            <label htmlFor="Female">Female</label>
+            <input
+              checked={isFemaleChecked}
+              type="checkbox"
+              onChange={() => onChangeSex("Female")}
+            />
+          </div>
         </div>
         <br />
         <button type="submit" disabled={startValidation}>
