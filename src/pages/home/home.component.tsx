@@ -11,12 +11,22 @@ interface startValidationColorProps {
   age: boolean | null;
   sex: boolean | null;
   dev: boolean | null;
-}
+};
+
+interface UserProps {
+  name: string;
+  surname: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  age: any;
+  sex: string;
+  dev: string;
+};
 
 export const Home: React.FC = () => {
 
   const isMobile: boolean = useMediaQuery({ maxWidth: "725px" });
-  console.log("isMobile", isMobile);
 
   const [startValidation, setStartValidation] = React.useState(false);
   const [startValidationColor, setStartValidationColor] =
