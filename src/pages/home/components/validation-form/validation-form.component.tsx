@@ -1,7 +1,8 @@
 import React from 'react';
 import { useMediaQuery } from "react-responsive";
 import { UserProps, startValidationColorProps } from "@/core";
-import { EmailInput } from '../email-input/email-input.component';
+import { EmailInput } from '../email-input';
+import './validation-form.styles.scss';
 
 export const ValidationForm: React.FC = () => {
 
@@ -289,29 +290,6 @@ export const ValidationForm: React.FC = () => {
 
   return (
     <form className="myForm" onSubmit={register}>
-      {/* <input
-        className={`${isEmailValid ? "valid" : ""}
-           ${
-             isEmailValid === false ||
-             (startValidationColor.email && !isEmailValid) ||
-             (user.email === "" && firstValueEmail)
-               ? "invalid"
-               : ""
-           }`}
-        value={user.email}
-        onChange={handleEmail}
-        type="text"
-        placeholder="Email.."
-      />
-      <br />
-      <div className="boxTxtError">
-        <span className="errorText" hidden={isEmailValid || user.email === ""}>
-          Invalid email address!
-        </span>
-        {user.email === "" && firstValueEmail && (
-          <span className="errorText">You must refill this input</span>
-        )}
-      </div> */}
       <EmailInput
         firstValueEmail={firstValueEmail}
         isEmailValid={isEmailValid}
