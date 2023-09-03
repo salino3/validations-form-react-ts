@@ -1,10 +1,10 @@
 import { UserProps, startValidationColorProps } from "@/core";
+import React from "react";
 
 interface Props {
   user: UserProps;
   startValidationColor: startValidationColorProps;
   setStartValidationColor: (value: React.SetStateAction<startValidationColorProps>) => void;
-  setIsEmailValid: React.Dispatch<React.SetStateAction<boolean | null | undefined>>;
   setIsPasswordStrong: (value: React.SetStateAction<boolean | null | undefined>) => void;
   setIsConfirmedPassword: React.Dispatch<React.SetStateAction<boolean | null | undefined>>
 };
@@ -13,15 +13,15 @@ export const isValidInput = ({
   user,
   setStartValidationColor,
   startValidationColor,
-  setIsEmailValid,
   setIsPasswordStrong,
   setIsConfirmedPassword,
 }: Props) => {
   //
   const isValidEmail = () => {
+
     if (user.email !== "") {
       setStartValidationColor({ ...startValidationColor, email: true });
-    }
+    };
 
     const isValid = user.email
       ? //# ? /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(user.email)
@@ -31,14 +31,13 @@ export const isValidInput = ({
         )
       : null;
 
-    setIsEmailValid(isValid);
     return isValid;
   };
   //
   const isStrongPassword = () => {
     if (user.password !== "") {
       setStartValidationColor({ ...startValidationColor, password: true });
-    }
+    };
 
     const isValid = user.password
       ? //# ? /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9\d])(?=.*\d).{8,}/.test(user.password)
@@ -69,10 +68,10 @@ export const isValidInput = ({
         if (user.age && user.age < 18) {
           const bool = user && user?.age && user?.age >= 18 ? true : null;
           setStartValidationColor({ ...startValidationColor, age: bool });
-        }
+        };
         if (user.age >= 18) {
           setStartValidationColor({ ...startValidationColor, age: false });
-        }
+        };
         return true;
       };
 

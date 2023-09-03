@@ -1,5 +1,4 @@
 import React from "react";
-import { useMediaQuery } from "react-responsive";
 import { UserProps, startValidationColorProps } from "@/core";
 import { isValidInput } from "@/hooks";
 import {
@@ -11,11 +10,11 @@ import {
   AgeInput,
   DevInput,
   SexInput,
+  ValidationButton,
 } from "../";
 import "./validation-form.styles.scss";
 
 export const ValidationForm: React.FC = () => {
-  const isMobile: boolean = useMediaQuery({ maxWidth: "725px" });
 
   const [startValidationColor, setStartValidationColor] =
     React.useState<startValidationColorProps>({
@@ -32,28 +31,15 @@ export const ValidationForm: React.FC = () => {
 
   //
   const [firstValueEmail, setFirstValueEmail] = React.useState(false);
-  const [firstValueName, setFirstValueName] = React.useState<boolean | null>(
-    false
-  );
-  const [firstValueSurname, setFirstValueSurname] = React.useState<
-    boolean | null
-  >(false);
-  const [firstValuePswStrong, setFirstValuePswStrong] = React.useState<
-    boolean | null
-  >(false);
+  const [firstValueName, setFirstValueName] = React.useState<boolean | null>(false);
+  const [firstValueSurname, setFirstValueSurname] = React.useState<boolean | null>(false);
+  const [firstValuePswStrong, setFirstValuePswStrong] = React.useState<boolean | null>(false);
   const [firstValueAge, setFirstValueAge] = React.useState(false);
-  const [firstValueDev, setFirstValueDev] = React.useState<boolean | null>(
-    null
-  );
+  const [firstValueDev, setFirstValueDev] = React.useState<boolean | null>(null);
 
   //
-  const [isEmailValid, setIsEmailValid] = React.useState<boolean | null>();
-  const [isPasswordStrong, setIsPasswordStrong] = React.useState<
-    boolean | null
-  >();
-  const [isConfirmedPassword, setIsConfirmedPassword] = React.useState<
-    boolean | null
-  >();
+  const [isPasswordStrong, setIsPasswordStrong] = React.useState<boolean | null>();
+  const [isConfirmedPassword, setIsConfirmedPassword] = React.useState<boolean | null>();
 
   const [user, setUser] = React.useState<UserProps>({
     name: "",
@@ -129,12 +115,12 @@ export const ValidationForm: React.FC = () => {
   };
 
   // Hooks
+
   const { isValidEmail, isStrongPassword, isPasswordConfirmed, isMajor } =
     isValidInput({
       user,
       setStartValidationColor,
       startValidationColor,
-      setIsEmailValid,
       setIsPasswordStrong,
       setIsConfirmedPassword,
     });
@@ -142,12 +128,11 @@ export const ValidationForm: React.FC = () => {
   return (
     <form className="myForm" onSubmit={register}>
       <EmailInput
-        firstValueEmail={firstValueEmail}
-        isEmailValid={isEmailValid}
-        isValidEmail={isValidEmail}
-        setUser={setUser}
-        startValidationColor={startValidationColor}
         user={user}
+        setUser={setUser}
+        firstValueEmail={firstValueEmail}
+        startValidationColor={startValidationColor}
+        setStartValidationColor={setStartValidationColor}
       />
       <br />
       <NameInput
@@ -204,16 +189,14 @@ export const ValidationForm: React.FC = () => {
         startValidationColor={startValidationColor}
       />
       <br />
-     <SexInput
-     user={user}
-     setStartValidationColor={setStartValidationColor}
-     setUser={setUser}
-     startValidationColor={startValidationColor}
-     />
+      <SexInput
+        user={user}
+        setStartValidationColor={setStartValidationColor}
+        setUser={setUser}
+        startValidationColor={startValidationColor}
+      />
       <br />
-      <button type="submit" disabled={startValidation}>
-        Register
-      </button>
+     <ValidationButton startValidation={startValidation} />
     </form>
   );
 };

@@ -7,3 +7,4 @@ export * from "./confirmed-password-input";
 export * from "./age-input";
 export * from "./sex-input";
 export * from "./dev-input";
+export * from './btn-validation-form';
