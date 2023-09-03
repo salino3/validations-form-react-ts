@@ -1,36 +1,14 @@
 import React from "react";
 import { useMediaQuery } from "react-responsive";
+import { UserProps, startValidationColorProps } from "@/core";
 import "./home.styles.scss";
 
-interface startValidationColorProps {
-  name: boolean | null;
-  surname: boolean | null;
-  email: boolean | null;
-  password: boolean | null;
-  confirmPassword: boolean | null;
-  age: boolean | null;
-  sex: boolean | null;
-  dev: boolean | null;
-};
-
-interface UserProps {
-  name: string;
-  surname: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  age: any;
-  sex: string;
-  dev: string;
-};
 
 export const Home: React.FC = () => {
 
   const isMobile: boolean = useMediaQuery({ maxWidth: "725px" });
 
-  const [startValidation, setStartValidation] = React.useState(false);
-  const [startValidationColor, setStartValidationColor] =
-    React.useState<startValidationColorProps>({
+  const [startValidationColor, setStartValidationColor] = React.useState<startValidationColorProps>({
       name: false,
       surname: false,
       email: false,
@@ -40,6 +18,8 @@ export const Home: React.FC = () => {
       sex: null,
       dev: null,
     });
+    const [startValidation, setStartValidation] = React.useState(false);
+
 
     //
   const [firstValueEmail, setFirstValueEmail] = React.useState(false);
@@ -56,7 +36,7 @@ export const Home: React.FC = () => {
 
   
 
-  const [user, setUser] = React.useState<any>({
+  const [user, setUser] = React.useState<UserProps>({
     name: "",
     surname: "",
     email: "",
