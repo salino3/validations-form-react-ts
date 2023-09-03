@@ -1,1 +1,1 @@
-export * from './index';
+export * from './is-valid-input';

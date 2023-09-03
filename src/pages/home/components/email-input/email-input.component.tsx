@@ -20,8 +20,8 @@ export const EmailInput: React.FC<Props> = (props) => {
       firstValueEmail,
     } = props;
 
-     const handleEmail = (e: any) => {
-       setUser({ ...user, email: e.target.value });
+     const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+       setUser({ ...user, email: e.target.value.trim() });
 
        isValidEmail();
      };
@@ -45,7 +45,7 @@ export const EmailInput: React.FC<Props> = (props) => {
         value={user.email}
         onChange={handleEmail}
         type="text"
-        placeholder="Email.."
+        placeholder="Email.. (NO space)"
       />
       <br />
       <div className="boxTxtError">

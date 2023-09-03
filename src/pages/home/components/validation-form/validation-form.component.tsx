@@ -3,10 +3,14 @@ import { useMediaQuery } from "react-responsive";
 import { UserProps, startValidationColorProps } from "@/core";
 import { EmailInput } from '../email-input';
 import './validation-form.styles.scss';
+import { isValidInput } from '@/hooks';
+import { NameInput } from '../name-input';
+import { SurnameInput } from '../surname-input/surname-input.component';
 
 export const ValidationForm: React.FC = () => {
 
   const isMobile: boolean = useMediaQuery({ maxWidth: "725px" });
+
 
   const [startValidationColor, setStartValidationColor] =
     React.useState<startValidationColorProps>({
@@ -137,19 +141,6 @@ export const ValidationForm: React.FC = () => {
     setStartValidation(false);
   };
 
-  const isValidEmail = () => {
-    if (user.email !== "") {
-      setStartValidationColor({ ...startValidationColor, email: true });
-    }
-
-    const emailValid = user.email
-      ? /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(user.email)
-      : null;
-
-    setIsEmailValid(emailValid);
-    console.log("isEmailValid", isEmailValid);
-    return emailValid;
-  };
 
   const isStrongPassword = () => {
     if (user.password !== "") {
@@ -193,51 +184,6 @@ export const ValidationForm: React.FC = () => {
   };
   // Handlers
 
-  const handleEmail = (e: any) => {
-    setUser({ ...user, email: e.target.value });
-
-    isValidEmail();
-  };
-
-  React.useEffect(() => {
-    isValidEmail();
-  }, [isEmailValid, user.email]);
-
-  const handleName = (e: any) => {
-    setUser({ ...user, name: e.target.value });
-  };
-
-  React.useEffect(() => {
-    if (user.name) {
-      setFirstValueName(true);
-    }
-
-    if (user.name.length >= 2) {
-      setStartValidationColor({ ...startValidationColor, name: true });
-      setFirstValueName(false);
-    }
-    if (user.name.length < 2) {
-      setStartValidationColor({ ...startValidationColor, name: false });
-    }
-  }, [user.name, firstValueName, startValidationColor.name]);
-
-  const handleSurname = (e: any) => {
-    setUser({ ...user, surname: e.target.value });
-  };
-
-  React.useEffect(() => {
-    if (user.surname) {
-      setFirstValueSurname(true);
-    }
-
-    if (user.surname.length >= 2) {
-      setStartValidationColor({ ...startValidationColor, surname: true });
-      setFirstValueSurname(false);
-    }
-    if (user.surname.length < 2) {
-      setStartValidationColor({ ...startValidationColor, surname: false });
-    }
-  }, [user.surname, firstValueSurname, startValidationColor.surname]);
 
   //
   const handleAge = (e: any) => {
@@ -288,6 +234,16 @@ export const ValidationForm: React.FC = () => {
     console.log("handleDev2", startValidationColor.dev);
   }, [isConfirmedPassword, user.dev]);
 
+// Hooks
+    const { isValidEmail } = isValidInput({
+      user,
+      setStartValidationColor,
+      startValidationColor,
+      isEmailValid,
+      setIsEmailValid,
+    });
+
+
   return (
     <form className="myForm" onSubmit={register}>
       <EmailInput
@@ -299,59 +255,23 @@ export const ValidationForm: React.FC = () => {
         user={user}
       />
       <br />
-      <input
-        className={`${
-          startValidationColor.name
-            ? "valid"
-            : startValidationColor.name === false && firstValueName
-            ? "invalid"
-            : ""
-        }`}
-        type="text"
-        value={user.name}
-        onChange={handleName}
-        id="name"
-        placeholder="Name.."
+    <NameInput
+     firstValueName={firstValueName} 
+     setFirstValueName={setFirstValueName}
+     setStartValidationColor={setStartValidationColor}
+     startValidationColor={startValidationColor}
+     user={user}
+     setUser={setUser}
+     />
+      <br />
+      <SurnameInput
+      firstValueSurname={firstValueSurname}
+      setFirstValueSurname={setFirstValueSurname}
+      setStartValidationColor={setStartValidationColor}
+      setUser={setUser}
+      startValidationColor={startValidationColor}
+      user={user}
       />
-      <br />
-      <div className="boxTxtError">
-        <span
-          className="errorText"
-          hidden={
-            !!startValidationColor.name ||
-            (!startValidationColor.name && !firstValueName)
-          }
-        >
-          You must refill name input
-        </span>
-      </div>
-      <br />
-      <input
-        className={`${
-          startValidationColor.surname
-            ? "valid"
-            : startValidationColor.surname === false && firstValueSurname
-            ? "invalid"
-            : ""
-        }`}
-        type="text"
-        value={user.surname}
-        onChange={handleSurname}
-        id="surname"
-        placeholder="Surname.."
-      />
-      <br />
-      <div className="boxTxtError">
-        <span
-          className="errorText"
-          hidden={
-            !!startValidationColor.surname ||
-            (!startValidationColor.surname && !firstValueSurname)
-          }
-        >
-          You must refill surname input
-        </span>
-      </div>
       <br />
       <input
         className={
