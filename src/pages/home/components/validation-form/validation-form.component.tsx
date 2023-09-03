@@ -1,6 +1,6 @@
 import React from "react";
 import { UserProps, startValidationColorProps } from "@/core";
-import { isValidInput } from "@/hooks";
+import { SubmitFormValidation, isValidInput } from "@/hooks";
 import {
   EmailInput,
   NameInput,
@@ -16,6 +16,20 @@ import "./validation-form.styles.scss";
 
 export const ValidationForm: React.FC = () => {
 
+  // useStates
+  const [startValidation, setStartValidation] = React.useState(false);
+
+  const [firstValueEmail, setFirstValueEmail] = React.useState(false);
+  const [firstValueName, setFirstValueName] = React.useState<boolean | null>(false);
+  const [firstValueSurname, setFirstValueSurname] = React.useState<boolean | null>(false);
+  const [firstValuePswStrong, setFirstValuePswStrong] = React.useState<boolean | null>(false);
+  const [firstValueAge, setFirstValueAge] = React.useState(false);
+  const [firstValueDev, setFirstValueDev] = React.useState<boolean | null>(null);
+
+  //
+  const [isPasswordStrong, setIsPasswordStrong] = React.useState<boolean | null>();
+  const [isConfirmedPassword, setIsConfirmedPassword] = React.useState<boolean | null>();
+
   const [startValidationColor, setStartValidationColor] =
     React.useState<startValidationColorProps>({
       name: false,
@@ -27,19 +41,6 @@ export const ValidationForm: React.FC = () => {
       sex: null,
       dev: null,
     });
-  const [startValidation, setStartValidation] = React.useState(false);
-
-  //
-  const [firstValueEmail, setFirstValueEmail] = React.useState(false);
-  const [firstValueName, setFirstValueName] = React.useState<boolean | null>(false);
-  const [firstValueSurname, setFirstValueSurname] = React.useState<boolean | null>(false);
-  const [firstValuePswStrong, setFirstValuePswStrong] = React.useState<boolean | null>(false);
-  const [firstValueAge, setFirstValueAge] = React.useState(false);
-  const [firstValueDev, setFirstValueDev] = React.useState<boolean | null>(null);
-
-  //
-  const [isPasswordStrong, setIsPasswordStrong] = React.useState<boolean | null>();
-  const [isConfirmedPassword, setIsConfirmedPassword] = React.useState<boolean | null>();
 
   const [user, setUser] = React.useState<UserProps>({
     name: "",
@@ -52,67 +53,27 @@ export const ValidationForm: React.FC = () => {
     dev: "",
   });
 
-  const register = (event: any) => {
-    event.preventDefault();
-    setStartValidation(true);
-    setStartValidationColor({
-      name: true,
-      surname: true,
-      email: true,
-      password: true,
-      confirmPassword: true,
-      age: true,
-      sex: true,
-      dev: true,
-    });
+//
+ const register = (event: React.FormEvent<HTMLFormElement>) => {
+   event.preventDefault();
 
-    if (user.email === "") {
-      setFirstValueEmail(true);
-    }
-
-    if (user.name === "") {
-      setFirstValueName(true);
-    }
-
-    if (user.surname === "") {
-      setFirstValueSurname(true);
-    }
-
-    if (user.age === null) {
-      setFirstValueAge(true);
-    }
-
-    if (user.password === "") {
-      setFirstValuePswStrong(true);
-    }
-
-    if (user.dev === "") {
-      setFirstValueDev(false);
-    }
-
-    if (!startValidationColor.sex) {
-      setStartValidationColor({ ...startValidationColor, sex: false });
-    }
-
-    if (
-      isValidEmail() &&
-      user.name &&
-      user.surname &&
-      isStrongPassword() &&
-      isPasswordConfirmed() &&
-      isMajor() &&
-      user.sex &&
-      user.dev
-    ) {
-      alert("Registering...");
-      console.log(JSON.stringify(user, null, 2));
-    } else {
-      alert("Sorry, an error has occurred..");
-      console.log(user);
-    }
-
-    setStartValidation(false);
-  };
+   registerData({
+     user,
+     setStartValidation,
+     setStartValidationColor,
+     setFirstValueEmail,
+     setFirstValueName,
+     setFirstValueSurname,
+     setFirstValueAge,
+     setFirstValuePswStrong,
+     setFirstValueDev,
+     startValidationColor,
+     isValidEmail,
+     isStrongPassword,
+     isPasswordConfirmed,
+     isMajor,
+   });
+ };
 
   // Hooks
 
@@ -124,6 +85,25 @@ export const ValidationForm: React.FC = () => {
       setIsPasswordStrong,
       setIsConfirmedPassword,
     });
+
+      const { registerData } = SubmitFormValidation({
+        user,
+        setStartValidation,
+        setStartValidationColor,
+        setFirstValueEmail,
+        setFirstValueName,
+        setFirstValueSurname,
+        setFirstValueAge,
+        setFirstValuePswStrong,
+        setFirstValueDev,
+        startValidationColor,
+        isValidEmail,
+        isStrongPassword,
+        isPasswordConfirmed,
+        isMajor,
+      });
+
+   
 
   return (
     <form className="myForm" onSubmit={register}>
@@ -196,7 +176,7 @@ export const ValidationForm: React.FC = () => {
         startValidationColor={startValidationColor}
       />
       <br />
-     <ValidationButton startValidation={startValidation} />
+      <ValidationButton startValidation={startValidation} />
     </form>
   );
 };
