@@ -64,13 +64,24 @@ export const isValidInput = ({
     setIsConfirmedPassword(bool);
     return bool;
   };
-
+//
+      const isMajor = () => {
+        if (user.age && user.age < 18) {
+          const bool = user && user?.age && user?.age >= 18 ? true : null;
+          setStartValidationColor({ ...startValidationColor, age: bool });
+        }
+        if (user.age >= 18) {
+          setStartValidationColor({ ...startValidationColor, age: false });
+        }
+        return true;
+      };
 
 
   return {
     isValidEmail,
     isStrongPassword,
     isPasswordConfirmed,
+    isMajor
   };
 };
 

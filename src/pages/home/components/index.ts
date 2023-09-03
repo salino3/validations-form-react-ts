@@ -3,4 +3,5 @@ export * from "./email-input";
 export * from "./name-input";
 export * from "./surname-input";
 export * from "./password-input";
-export * from "./confirmed-password";
+export * from "./confirmed-password-input";
+export * from "./age-input";

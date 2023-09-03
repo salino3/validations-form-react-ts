@@ -2,7 +2,7 @@ import React from 'react';
 import { useMediaQuery } from "react-responsive";
 import { UserProps, startValidationColorProps } from "@/core";
 import { isValidInput } from '@/hooks';
-import { EmailInput, NameInput, SurnameInput, PasswordInput, ConfirmedPassword } from "../";
+import { EmailInput, NameInput, SurnameInput, PasswordInput, ConfirmedPassword, AgeInput } from "../";
 import './validation-form.styles.scss';
 
 export const ValidationForm: React.FC = () => {
@@ -139,47 +139,11 @@ export const ValidationForm: React.FC = () => {
     setStartValidation(false);
   };
 
-  // //
-  // const isPasswordConfirmed = () => {
-  //   if (user.confirmPassword !== "" && user.password !== user.confirmPassword) {
-  //     setStartValidationColor({
-  //       ...startValidationColor,
-  //       confirmPassword: true,
-  //     });
-  //   }
+  // 
 
-  //   const bool = user.confirmPassword
-  //     ? user.password === user.confirmPassword
-  //     : null;
-  //   setIsConfirmedPassword(bool);
-  //   return bool;
-  // };
-
-  const isMajor = () => {
-    if (user.age && user.age < 18) {
-      const bool = user && user?.age && user?.age >= 18 ? true : null;
-      setStartValidationColor({ ...startValidationColor, age: bool });
-    }
-    if (user.age >= 18) {
-      setStartValidationColor({ ...startValidationColor, age: false });
-    }
-    return true;
-  };
   // Handlers
 
 
-  //
-  const handleAge = (e: any) => {
-    setUser({ ...user, age: parseInt(e.target.value) });
-
-    isMajor();
-    setFirstValueAge(true);
-  };
-
-  React.useEffect(() => {
-    isMajor();
-  }, [user.age]);
-  
   //
 
   const handleDev = (e: any) => {
@@ -198,7 +162,7 @@ export const ValidationForm: React.FC = () => {
   }, [isConfirmedPassword, user.dev]);
 
 // Hooks
-    const { isValidEmail, isStrongPassword, isPasswordConfirmed } =
+    const { isValidEmail, isStrongPassword, isPasswordConfirmed, isMajor } =
       isValidInput({
         user,
         setStartValidationColor,
@@ -256,41 +220,14 @@ export const ValidationForm: React.FC = () => {
       user={user}
       />
       <br />
-      <input
-        className={
-          (firstValueAge &&
-            (user.age < 18 || startValidationColor.age === null)) ||
-          isNaN(user.age) ||
-          (user.age === null && firstValueAge)
-            ? "invalid invalidPseudoClass"
-            : user && user?.age && user?.age >= 18
-            ? "valid validPseudoClass"
-            : ""
-        }
-        value={user.age || ""}
-        onChange={handleAge}
-        type="number"
-        min="0"
-        placeholder="Age.."
-      />
-      <br />
-      <div className="boxTxtError">
-        <span
-          className="errorText"
-          hidden={
-            (user.age !== null && user.age >= 18) ||
-            (isNaN(user.age) && firstValueAge) ||
-            user.age === null
-          }
-        >
-          You must be Major!
-        </span>
-        {(user.age === null && firstValueAge) || isNaN(user.age) ? (
-          <span className="errorText">You must refill this input</span>
-        ) : (
-          ""
-        )}
-      </div>
+     <AgeInput
+     user={user}
+     firstValueAge={firstValueAge}
+     isMajor={isMajor}
+     setFirstValueAge={setFirstValueAge}
+     setUser={setUser}
+     startValidationColor={startValidationColor}
+     />
       <br />
       <div className="boxDev">
         <label htmlFor="dev">What developer are you?</label> &nbsp;

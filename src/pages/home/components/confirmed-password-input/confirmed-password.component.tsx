@@ -20,8 +20,8 @@ export const ConfirmedPassword: React.FC<Props> = (props) => {
     isPasswordConfirmed,
   } = props;
 
-  const handleConfirmPassword = (e: any) => {
-    setUser({ ...user, confirmPassword: e.target.value });
+  const handleConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUser({ ...user, confirmPassword: e.target.value.trim() });
 
     isStrongPassword();
   };

@@ -21,7 +21,7 @@ export const PasswordInput: React.FC<Props> = (props) => {
   } = props;
 
   const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUser({ ...user, password: e.target.value });
+    setUser({ ...user, password: e.target.value.trim() });
 
     isStrongPassword();
   };
@@ -45,7 +45,7 @@ export const PasswordInput: React.FC<Props> = (props) => {
         value={user.password}
         onChange={handlePassword}
         type="password"
-        placeholder="Password.."
+        placeholder="Password..  (NO space)"
       />
       <br />
       <div className="boxTxtError">
