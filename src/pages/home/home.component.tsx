@@ -26,20 +26,20 @@ export const Home: React.FC = () => {
       dev: null,
     });
 
-  //!
-  const [isEmailValid, setIsEmailValid] = React.useState<boolean | null>();
+    //
+  const [firstValueEmail, setFirstValueEmail] = React.useState(false);
   const [firstValueName, setFirstValueName] = React.useState<boolean | null>(false);
   const [firstValueSurname, setFirstValueSurname] = React.useState<boolean | null>(false);
-  const [firstValueAge, setFirstValueAge] = React.useState(false);
-  const [isPasswordStrong, setIsPasswordStrong] = React.useState<boolean | null>();
   const [firstValuePswStrong, setFirstValuePswStrong] = React.useState<boolean | null>(false);
-  const [isConfirmedPassword, setIsConfirmedPassword] = React.useState<boolean | null>();
-  // const [firstValueConfirmedPsw, setFirstValueConfirmedPsw] = React.useState(false);
-  const [firstValuedDev, setfirstValuedDev] = React.useState<boolean | null>(
-    null
-  );
+  const [firstValueAge, setFirstValueAge] = React.useState(false);
+  const [firstValueDev, setfirstValueDev] = React.useState<boolean | null>(null);
 
-  //!
+  //
+  const [isEmailValid, setIsEmailValid] = React.useState<boolean | null>();
+  const [isPasswordStrong, setIsPasswordStrong] = React.useState<boolean | null>();
+  const [isConfirmedPassword, setIsConfirmedPassword] = React.useState<boolean | null>();
+
+  
 
   const [user, setUser] = React.useState<any>({
     name: "",
@@ -84,6 +84,18 @@ export const Home: React.FC = () => {
       dev: true,
     });
 
+    if (user.email === "") {
+      setFirstValueEmail(true );
+    }
+
+    if (user.name === "") {
+      setFirstValueName(true);
+    }
+
+    if (user.surname === "") {
+      setFirstValueSurname(true);
+    }
+
     if (user.age === null) {
       setFirstValueAge(true);
     }
@@ -93,7 +105,7 @@ export const Home: React.FC = () => {
     }
 
     if (user.dev === "") {
-      setfirstValuedDev(false);
+      setfirstValueDev(false);
     }
 
     if (!startValidationColor.sex) {
@@ -102,6 +114,8 @@ export const Home: React.FC = () => {
 
     if (
       isValidEmail() &&
+      user.name &&
+      user.surname &&
       isStrongPassword() &&
       isPasswordConfirmed() &&
       isMajor() &&
@@ -172,7 +186,19 @@ export const Home: React.FC = () => {
     }
     return true;
   };
-  // Handles
+  // Handlers
+
+  
+  const handleEmail = (e: any) => {
+    setUser({ ...user, email: e.target.value });
+
+    isValidEmail();
+  };
+
+  React.useEffect(() => {
+    isValidEmail();
+  }, [isEmailValid, user.email]);
+
 
   const handleName = (e: any) => {
     setUser({ ...user, name: e.target.value });
@@ -211,17 +237,6 @@ export const Home: React.FC = () => {
       }
     }, [user.surname, firstValueSurname, startValidationColor.surname]);
 
-
-  const handleEmail = (e: any) => {
-    setUser({ ...user, email: e.target.value });
-
-    isValidEmail();
-  };
-
-  React.useEffect(() => {
-    isValidEmail();
-  }, [isEmailValid, user.email]);
-
   //
   const handleAge = (e: any) => {
     setUser({ ...user, age: parseInt(e.target.value) });
@@ -259,13 +274,13 @@ export const Home: React.FC = () => {
   const handleDev = (e: any) => {
     setUser({ ...user, dev: e.target.value });
     console.log("handleDev", user.dev);
-    setfirstValuedDev(true);
+    setfirstValueDev(true);
   };
   React.useEffect(() => {
     if (user.dev !== "") {
       setStartValidationColor({ ...startValidationColor, dev: true });
     }
-    if (user.dev === "" && firstValuedDev) {
+    if (user.dev === "" && firstValueDev) {
       setStartValidationColor({ ...startValidationColor, dev: false });
     }
     console.log("handleDev2", startValidationColor.dev);
@@ -281,7 +296,8 @@ export const Home: React.FC = () => {
           className={`${isEmailValid ? "valid" : ""}
            ${
              isEmailValid === false ||
-             (startValidationColor.email && !isEmailValid)
+             (startValidationColor.email && !isEmailValid) ||
+             (user.email === "" && firstValueEmail)
                ? "invalid"
                : ""
            }`}
@@ -291,9 +307,17 @@ export const Home: React.FC = () => {
           placeholder="Email.."
         />
         <br />
-        <span className="errorText" hidden={isEmailValid || user.email === ""}>
-          Invalid email address!
-        </span>
+        <div className="boxTxtError">
+          <span
+            className="errorText"
+            hidden={isEmailValid || user.email === ""}
+          >
+            Invalid email address!
+          </span>
+          {user.email === "" && firstValueEmail && (
+            <span className="errorText">You must refill this input</span>
+          )}
+        </div>
         <br />
         <input
           className={`${
@@ -310,15 +334,17 @@ export const Home: React.FC = () => {
           placeholder="Name.."
         />
         <br />
-        <span
-          className="errorText"
-          hidden={
-            !!startValidationColor.name ||
-            (!startValidationColor.name && !firstValueName)
-          }
-        >
-          You must refill name input
-        </span>
+        <div className="boxTxtError">
+          <span
+            className="errorText"
+            hidden={
+              !!startValidationColor.name ||
+              (!startValidationColor.name && !firstValueName)
+            }
+          >
+            You must refill name input
+          </span>
+        </div>
         <br />
         <input
           className={`${
@@ -335,15 +361,17 @@ export const Home: React.FC = () => {
           placeholder="Surname.."
         />
         <br />
-        <span
-          className="errorText"
-          hidden={
-            !!startValidationColor.surname ||
-            (!startValidationColor.surname && !firstValueSurname)
-          }
-        >
-          You must refill surname input
-        </span>
+        <div className="boxTxtError">
+          <span
+            className="errorText"
+            hidden={
+              !!startValidationColor.surname ||
+              (!startValidationColor.surname && !firstValueSurname)
+            }
+          >
+            You must refill surname input
+          </span>
+        </div>
         <br />
         <input
           className={
@@ -361,9 +389,14 @@ export const Home: React.FC = () => {
           placeholder="Password.."
         />
         <br />
-        <span className="errorText">
-          {user.password !== "" && !isPasswordStrong && "Weak password!"}
-        </span>
+        <div className="boxTxtError">
+          <span className="errorText">
+            {user.password !== "" && !isPasswordStrong && "Weak password!"}
+          </span>
+          {user.password === "" && firstValuePswStrong && (
+            <span className="errorText">You must refill this input</span>
+          )}
+        </div>
         <br />
         <input
           className={
@@ -382,14 +415,16 @@ export const Home: React.FC = () => {
           placeholder="Confirm password"
         />
         <br />
-        <span className="errorText">
-          {(user.password !== user.confirmPassword &&
-            user.confirmPassword !== "" &&
-            "Repeat password!") ||
-            (user.confirmPassword !== "" &&
-              !isConfirmedPassword &&
-              "Repeat password!")}
-        </span>
+        <div className="boxTxtError">
+          <span className="errorText">
+            {(user.password !== user.confirmPassword &&
+              user.confirmPassword !== "" &&
+              "Repeat password!") ||
+              (user.confirmPassword !== "" &&
+                !isConfirmedPassword &&
+                "Repeat password!")}
+          </span>
+        </div>
         <br />
         <input
           className={
@@ -409,18 +444,24 @@ export const Home: React.FC = () => {
           placeholder="Age.."
         />
         <br />
-        <span
-          className="errorText"
-          hidden={
-            (user.age !== null && user.age >= 18) ||
-            (isNaN(user.age) && firstValueAge) ||
-            user.age === null
-          }
-        >
-          You must be Major!
-        </span>
+        <div className="boxTxtError">
+          <span
+            className="errorText"
+            hidden={
+              (user.age !== null && user.age >= 18) ||
+              (isNaN(user.age) && firstValueAge) ||
+              user.age === null
+            }
+          >
+            You must be Major!
+          </span>
+          {(user.age === null && firstValueAge) || isNaN(user.age) ? (
+            <span className="errorText">You must refill this input</span>
+          ) : (
+            ""
+          )}
+        </div>
         <br />
-
         <div className="boxDev">
           <label htmlFor="dev">What developer are you?</label> &nbsp;
           <select
@@ -430,7 +471,7 @@ export const Home: React.FC = () => {
                 : startValidationColor.dev === false
                 ? "invalidPadding"
                 : ""
-            } ${firstValuedDev === false ? "invalidPadding" : ""} `}
+            } ${firstValueDev === false ? "invalidPadding" : ""} `}
             value={user.dev}
             id="dev"
             onChange={handleDev}
@@ -441,6 +482,7 @@ export const Home: React.FC = () => {
             <option value="DevOps">DevOps</option>
           </select>
         </div>
+        <br />
         <br />
         <div className="inputsCheckBox">
           <label>Your sex:</label> &nbsp; &nbsp;
