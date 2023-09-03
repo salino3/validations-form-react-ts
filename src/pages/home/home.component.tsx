@@ -1,4 +1,5 @@
 import React from "react";
+import { useMediaQuery } from "react-responsive";
 import "./home.styles.scss";
 
 interface startValidationColorProps {
@@ -13,6 +14,10 @@ interface startValidationColorProps {
 }
 
 export const Home: React.FC = () => {
+
+  const isMobile: boolean = useMediaQuery({ maxWidth: "725px" });
+  console.log("isMobile", isMobile);
+
   const [startValidation, setStartValidation] = React.useState(false);
   const [startValidationColor, setStartValidationColor] =
     React.useState<startValidationColorProps>({
@@ -122,10 +127,10 @@ export const Home: React.FC = () => {
       user.sex &&
       user.dev
     ) {
-      //  alert("Registering...");
+       alert("Registering...");
       console.log(JSON.stringify(user, null, 2));
     } else {
-      //  alert("You have some error in the Form...");
+      alert("Sorry, an error has occurred..");
       console.log(user);
     }
 
@@ -287,7 +292,7 @@ export const Home: React.FC = () => {
   }, [isConfirmedPassword, user.dev]);
 
   return (
-    <div>
+    <div className="root">
       <h1 className="title">
         <span>&#9728;</span> Validation User Form <span>&#9728;</span>
       </h1>
@@ -464,6 +469,7 @@ export const Home: React.FC = () => {
         <br />
         <div className="boxDev">
           <label htmlFor="dev">What developer are you?</label> &nbsp;
+          {isMobile && <br />}
           <select
             className={` ${
               startValidationColor.dev === true
@@ -483,9 +489,8 @@ export const Home: React.FC = () => {
           </select>
         </div>
         <br />
-        <br />
         <div className="inputsCheckBox">
-          <label>Your sex:</label> &nbsp; &nbsp;
+          <label>Your sex:</label> {!isMobile && <> &nbsp; &nbsp; </>}
           <div
             className={`${
               startValidationColor.sex
