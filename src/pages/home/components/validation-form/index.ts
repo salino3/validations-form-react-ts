@@ -1,1 +1,1 @@
-export * from './validation-form';
+export * from './validation-form.component';

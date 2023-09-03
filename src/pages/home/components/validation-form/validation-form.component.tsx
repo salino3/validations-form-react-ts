@@ -1,6 +1,7 @@
 import React from 'react';
 import { useMediaQuery } from "react-responsive";
 import { UserProps, startValidationColorProps } from "@/core";
+import { EmailInput } from '../email-input/email-input.component';
 
 export const ValidationForm: React.FC = () => {
 
@@ -288,7 +289,7 @@ export const ValidationForm: React.FC = () => {
 
   return (
     <form className="myForm" onSubmit={register}>
-      <input
+      {/* <input
         className={`${isEmailValid ? "valid" : ""}
            ${
              isEmailValid === false ||
@@ -310,7 +311,15 @@ export const ValidationForm: React.FC = () => {
         {user.email === "" && firstValueEmail && (
           <span className="errorText">You must refill this input</span>
         )}
-      </div>
+      </div> */}
+      <EmailInput
+        firstValueEmail={firstValueEmail}
+        isEmailValid={isEmailValid}
+        isValidEmail={isValidEmail}
+        setUser={setUser}
+        startValidationColor={startValidationColor}
+        user={user}
+      />
       <br />
       <input
         className={`${
