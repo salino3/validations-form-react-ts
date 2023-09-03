@@ -307,12 +307,17 @@ export const Home: React.FC = () => {
           placeholder="Email.."
         />
         <br />
-        <span className="errorText" hidden={isEmailValid || user.email === ""}>
-          Invalid email address!
-        </span>
-        {user.email === "" && firstValueEmail && (
-          <span className="errorText">You must refill this input</span>
-        )}
+        <div className="boxTxtError">
+          <span
+            className="errorText"
+            hidden={isEmailValid || user.email === ""}
+          >
+            Invalid email address!
+          </span>
+          {user.email === "" && firstValueEmail && (
+            <span className="errorText">You must refill this input</span>
+          )}
+        </div>
         <br />
         <input
           className={`${
@@ -329,15 +334,17 @@ export const Home: React.FC = () => {
           placeholder="Name.."
         />
         <br />
-        <span
-          className="errorText"
-          hidden={
-            !!startValidationColor.name ||
-            (!startValidationColor.name && !firstValueName)
-          }
-        >
-          You must refill name input
-        </span>
+        <div className="boxTxtError">
+          <span
+            className="errorText"
+            hidden={
+              !!startValidationColor.name ||
+              (!startValidationColor.name && !firstValueName)
+            }
+          >
+            You must refill name input
+          </span>
+        </div>
         <br />
         <input
           className={`${
@@ -354,15 +361,17 @@ export const Home: React.FC = () => {
           placeholder="Surname.."
         />
         <br />
-        <span
-          className="errorText"
-          hidden={
-            !!startValidationColor.surname ||
-            (!startValidationColor.surname && !firstValueSurname)
-          }
-        >
-          You must refill surname input
-        </span>
+        <div className="boxTxtError">
+          <span
+            className="errorText"
+            hidden={
+              !!startValidationColor.surname ||
+              (!startValidationColor.surname && !firstValueSurname)
+            }
+          >
+            You must refill surname input
+          </span>
+        </div>
         <br />
         <input
           className={
@@ -380,12 +389,14 @@ export const Home: React.FC = () => {
           placeholder="Password.."
         />
         <br />
-        <span className="errorText">
-          {user.password !== "" && !isPasswordStrong && "Weak password!"}
-        </span>
-        {user.password === "" && firstValuePswStrong && (
-          <span className="errorText">You must refill this input</span>
-        )}
+        <div className="boxTxtError">
+          <span className="errorText">
+            {user.password !== "" && !isPasswordStrong && "Weak password!"}
+          </span>
+          {user.password === "" && firstValuePswStrong && (
+            <span className="errorText">You must refill this input</span>
+          )}
+        </div>
         <br />
         <input
           className={
@@ -404,14 +415,16 @@ export const Home: React.FC = () => {
           placeholder="Confirm password"
         />
         <br />
-        <span className="errorText">
-          {(user.password !== user.confirmPassword &&
-            user.confirmPassword !== "" &&
-            "Repeat password!") ||
-            (user.confirmPassword !== "" &&
-              !isConfirmedPassword &&
-              "Repeat password!")}
-        </span>
+        <div className="boxTxtError">
+          <span className="errorText">
+            {(user.password !== user.confirmPassword &&
+              user.confirmPassword !== "" &&
+              "Repeat password!") ||
+              (user.confirmPassword !== "" &&
+                !isConfirmedPassword &&
+                "Repeat password!")}
+          </span>
+        </div>
         <br />
         <input
           className={
@@ -431,21 +444,23 @@ export const Home: React.FC = () => {
           placeholder="Age.."
         />
         <br />
-        <span
-          className="errorText"
-          hidden={
-            (user.age !== null && user.age >= 18) ||
-            (isNaN(user.age) && firstValueAge) ||
-            user.age === null
-          }
-        >
-          You must be Major!
-        </span>
-        {(user.age === null && firstValueAge) || isNaN(user.age) ? (
-          <span className="errorText">You must refill this input</span>
-        ) : (
-          ""
-        )}
+        <div className="boxTxtError">
+          <span
+            className="errorText"
+            hidden={
+              (user.age !== null && user.age >= 18) ||
+              (isNaN(user.age) && firstValueAge) ||
+              user.age === null
+            }
+          >
+            You must be Major!
+          </span>
+          {(user.age === null && firstValueAge) || isNaN(user.age) ? (
+            <span className="errorText">You must refill this input</span>
+          ) : (
+            ""
+          )}
+        </div>
         <br />
         <div className="boxDev">
           <label htmlFor="dev">What developer are you?</label> &nbsp;
@@ -467,6 +482,7 @@ export const Home: React.FC = () => {
             <option value="DevOps">DevOps</option>
           </select>
         </div>
+        <br />
         <br />
         <div className="inputsCheckBox">
           <label>Your sex:</label> &nbsp; &nbsp;
