@@ -1,14 +1,21 @@
-import React from 'react';
+import React from "react";
 import { useMediaQuery } from "react-responsive";
 import { UserProps, startValidationColorProps } from "@/core";
-import { isValidInput } from '@/hooks';
-import { EmailInput, NameInput, SurnameInput, PasswordInput, ConfirmedPassword, AgeInput } from "../";
-import './validation-form.styles.scss';
+import { isValidInput } from "@/hooks";
+import {
+  EmailInput,
+  NameInput,
+  SurnameInput,
+  PasswordInput,
+  ConfirmedPassword,
+  AgeInput,
+  DevInput,
+  SexInput,
+} from "../";
+import "./validation-form.styles.scss";
 
 export const ValidationForm: React.FC = () => {
-
   const isMobile: boolean = useMediaQuery({ maxWidth: "725px" });
-
 
   const [startValidationColor, setStartValidationColor] =
     React.useState<startValidationColorProps>({
@@ -35,7 +42,7 @@ export const ValidationForm: React.FC = () => {
     boolean | null
   >(false);
   const [firstValueAge, setFirstValueAge] = React.useState(false);
-  const [firstValueDev, setfirstValueDev] = React.useState<boolean | null>(
+  const [firstValueDev, setFirstValueDev] = React.useState<boolean | null>(
     null
   );
 
@@ -58,24 +65,6 @@ export const ValidationForm: React.FC = () => {
     sex: "",
     dev: "",
   });
-
-  const [isMaleChecked, setIsMaleChecked] = React.useState(false);
-  const [isFemaleChecked, setIsFemaleChecked] = React.useState(false);
-
-  const onChangeSex = (sex: string) => {
-    if (sex === "Male") {
-      setUser({ ...user, sex: "Male" });
-      setIsMaleChecked(true);
-      setIsFemaleChecked(false);
-      setStartValidationColor({ ...startValidationColor, sex: true });
-    }
-    if (sex === "Female") {
-      setUser({ ...user, sex: "Female" });
-      setIsMaleChecked(false);
-      setIsFemaleChecked(true);
-      setStartValidationColor({ ...startValidationColor, sex: true });
-    }
-  };
 
   const register = (event: any) => {
     event.preventDefault();
@@ -112,7 +101,7 @@ export const ValidationForm: React.FC = () => {
     }
 
     if (user.dev === "") {
-      setfirstValueDev(false);
+      setFirstValueDev(false);
     }
 
     if (!startValidationColor.sex) {
@@ -139,39 +128,16 @@ export const ValidationForm: React.FC = () => {
     setStartValidation(false);
   };
 
-  // 
-
-  // Handlers
-
-
-  //
-
-  const handleDev = (e: any) => {
-    setUser({ ...user, dev: e.target.value });
-    console.log("handleDev", user.dev);
-    setfirstValueDev(true);
-  };
-  React.useEffect(() => {
-    if (user.dev !== "") {
-      setStartValidationColor({ ...startValidationColor, dev: true });
-    }
-    if (user.dev === "" && firstValueDev) {
-      setStartValidationColor({ ...startValidationColor, dev: false });
-    }
-    console.log("handleDev2", startValidationColor.dev);
-  }, [isConfirmedPassword, user.dev]);
-
-// Hooks
-    const { isValidEmail, isStrongPassword, isPasswordConfirmed, isMajor } =
-      isValidInput({
-        user,
-        setStartValidationColor,
-        startValidationColor,
-        setIsEmailValid,
-        setIsPasswordStrong,
-        setIsConfirmedPassword,
-      });
-
+  // Hooks
+  const { isValidEmail, isStrongPassword, isPasswordConfirmed, isMajor } =
+    isValidInput({
+      user,
+      setStartValidationColor,
+      startValidationColor,
+      setIsEmailValid,
+      setIsPasswordStrong,
+      setIsConfirmedPassword,
+    });
 
   return (
     <form className="myForm" onSubmit={register}>
@@ -184,104 +150,70 @@ export const ValidationForm: React.FC = () => {
         user={user}
       />
       <br />
-    <NameInput
-     firstValueName={firstValueName} 
-     setFirstValueName={setFirstValueName}
-     setStartValidationColor={setStartValidationColor}
-     startValidationColor={startValidationColor}
-     user={user}
-     setUser={setUser}
-     />
+      <NameInput
+        firstValueName={firstValueName}
+        setFirstValueName={setFirstValueName}
+        setStartValidationColor={setStartValidationColor}
+        startValidationColor={startValidationColor}
+        user={user}
+        setUser={setUser}
+      />
       <br />
       <SurnameInput
-      firstValueSurname={firstValueSurname}
-      setFirstValueSurname={setFirstValueSurname}
-      setStartValidationColor={setStartValidationColor}
-      setUser={setUser}
-      startValidationColor={startValidationColor}
-      user={user}
+        firstValueSurname={firstValueSurname}
+        setFirstValueSurname={setFirstValueSurname}
+        setStartValidationColor={setStartValidationColor}
+        setUser={setUser}
+        startValidationColor={startValidationColor}
+        user={user}
       />
       <br />
-    <PasswordInput
-     firstValuePswStrong={firstValuePswStrong}
-     isPasswordStrong={isPasswordStrong}
-     isStrongPassword={isStrongPassword}
-     setUser={setUser}
-     startValidationColor={startValidationColor}
-     user={user}
-     />
+      <PasswordInput
+        firstValuePswStrong={firstValuePswStrong}
+        isPasswordStrong={isPasswordStrong}
+        isStrongPassword={isStrongPassword}
+        setUser={setUser}
+        startValidationColor={startValidationColor}
+        user={user}
+      />
       <br />
       <ConfirmedPassword
-      isConfirmedPassword={isConfirmedPassword}
-      isPasswordConfirmed={isPasswordConfirmed}
-      isStrongPassword={isStrongPassword}
-      setUser={setUser}
-      startValidationColor={startValidationColor}
-      user={user}
+        isConfirmedPassword={isConfirmedPassword}
+        isPasswordConfirmed={isPasswordConfirmed}
+        isStrongPassword={isStrongPassword}
+        setUser={setUser}
+        startValidationColor={startValidationColor}
+        user={user}
       />
       <br />
-     <AgeInput
+      <AgeInput
+        user={user}
+        firstValueAge={firstValueAge}
+        isMajor={isMajor}
+        setFirstValueAge={setFirstValueAge}
+        setUser={setUser}
+        startValidationColor={startValidationColor}
+      />
+      <br />
+      <DevInput
+        user={user}
+        firstValueDev={firstValueDev}
+        setStartValidationColor={setStartValidationColor}
+        setUser={setUser}
+        setFirstValueDev={setFirstValueDev}
+        startValidationColor={startValidationColor}
+      />
+      <br />
+     <SexInput
      user={user}
-     firstValueAge={firstValueAge}
-     isMajor={isMajor}
-     setFirstValueAge={setFirstValueAge}
+     setStartValidationColor={setStartValidationColor}
      setUser={setUser}
      startValidationColor={startValidationColor}
      />
-      <br />
-      <div className="boxDev">
-        <label htmlFor="dev">What developer are you?</label> &nbsp;
-        {isMobile && <br />}
-        <select
-          className={` ${
-            startValidationColor.dev === true
-              ? "validPadding"
-              : startValidationColor.dev === false
-              ? "invalidPadding"
-              : ""
-          } ${firstValueDev === false ? "invalidPadding" : ""} `}
-          value={user.dev}
-          id="dev"
-          onChange={handleDev}
-        >
-          <option value="">..</option>
-          <option value="Front-end">Front-end</option>
-          <option value="Back-end">Back-end</option>
-          <option value="DevOps">DevOps</option>
-        </select>
-      </div>
-      <br />
-      <div className="inputsCheckBox">
-        <label>Your sex:</label> {!isMobile && <> &nbsp; &nbsp; </>}
-        <div
-          className={`${
-            startValidationColor.sex
-              ? "valid"
-              : startValidationColor.sex === false
-              ? "invalid"
-              : ""
-          } `}
-        >
-          <label htmlFor="Male">Male</label>
-          <input
-            checked={isMaleChecked}
-            id="Male"
-            type="checkbox"
-            onChange={() => onChangeSex("Male")}
-          />
-          &nbsp;
-          <label htmlFor="Female">Female</label>
-          <input
-            checked={isFemaleChecked}
-            type="checkbox"
-            onChange={() => onChangeSex("Female")}
-          />
-        </div>
-      </div>
       <br />
       <button type="submit" disabled={startValidation}>
         Register
       </button>
     </form>
   );
-}
+};

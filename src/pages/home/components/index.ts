@@ -5,3 +5,5 @@ export * from "./surname-input";
 export * from "./password-input";
 export * from "./confirmed-password-input";
 export * from "./age-input";
+export * from "./sex-input";
+export * from "./dev-input";
