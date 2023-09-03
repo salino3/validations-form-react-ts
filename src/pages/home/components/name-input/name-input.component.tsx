@@ -1,5 +1,5 @@
-import React from 'react';
-import { UserProps, startValidationColorProps } from '@/core';
+import React from "react";
+import { UserProps, startValidationColorProps } from "@/core";
 
 interface Props {
   user: UserProps;
@@ -7,29 +7,37 @@ interface Props {
   firstValueName: boolean | null;
   setUser: (value: React.SetStateAction<UserProps>) => void;
   setFirstValueName: (value: React.SetStateAction<boolean | null>) => void;
-  setStartValidationColor: (value: React.SetStateAction<startValidationColorProps>) => void;
-};
+  setStartValidationColor: (
+    value: React.SetStateAction<startValidationColorProps>
+  ) => void;
+}
 
 export const NameInput: React.FC<Props> = (props) => {
-    const { user, startValidationColor, firstValueName, setUser, setFirstValueName, setStartValidationColor } = props;
+  const {
+    user,
+    startValidationColor,
+    firstValueName,
+    setUser,
+    setFirstValueName,
+    setStartValidationColor,
+  } = props;
 
-    const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setUser({ ...user, name: e.target.value });
-    };
+  const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUser({ ...user, name: e.target.value });
+  };
 
   React.useEffect(() => {
     if (user.name) {
       setFirstValueName(true);
-    };
+    }
     if (user.name.length >= 2) {
       setStartValidationColor({ ...startValidationColor, name: true });
       setFirstValueName(false);
-    };
+    }
     if (user.name.length < 2) {
       setStartValidationColor({ ...startValidationColor, name: false });
-    };
+    }
   }, [user.name, firstValueName]);
-
 
   return (
     <>
@@ -61,4 +69,4 @@ export const NameInput: React.FC<Props> = (props) => {
       </div>
     </>
   );
-}
+};

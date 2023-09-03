@@ -1,11 +1,9 @@
 import React from 'react';
 import { useMediaQuery } from "react-responsive";
 import { UserProps, startValidationColorProps } from "@/core";
-import { EmailInput } from '../email-input';
-import './validation-form.styles.scss';
 import { isValidInput } from '@/hooks';
-import { NameInput } from '../name-input';
-import { SurnameInput } from '../surname-input/surname-input.component';
+import { EmailInput, NameInput, SurnameInput, PasswordInput, ConfirmedPassword } from "../";
+import './validation-form.styles.scss';
 
 export const ValidationForm: React.FC = () => {
 
@@ -141,36 +139,21 @@ export const ValidationForm: React.FC = () => {
     setStartValidation(false);
   };
 
+  // //
+  // const isPasswordConfirmed = () => {
+  //   if (user.confirmPassword !== "" && user.password !== user.confirmPassword) {
+  //     setStartValidationColor({
+  //       ...startValidationColor,
+  //       confirmPassword: true,
+  //     });
+  //   }
 
-  const isStrongPassword = () => {
-    if (user.password !== "") {
-      setStartValidationColor({ ...startValidationColor, password: true });
-    }
-
-    const bool = user.password
-      ? /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9\d])(?=.*\d).{8,}/.test(
-          user.password
-        )
-      : null;
-    setIsPasswordStrong(bool);
-    return bool;
-  };
-
-  //
-  const isPasswordConfirmed = () => {
-    if (user.confirmPassword !== "" && user.password !== user.confirmPassword) {
-      setStartValidationColor({
-        ...startValidationColor,
-        confirmPassword: true,
-      });
-    }
-
-    const bool = user.confirmPassword
-      ? user.password === user.confirmPassword
-      : null;
-    setIsConfirmedPassword(bool);
-    return bool;
-  };
+  //   const bool = user.confirmPassword
+  //     ? user.password === user.confirmPassword
+  //     : null;
+  //   setIsConfirmedPassword(bool);
+  //   return bool;
+  // };
 
   const isMajor = () => {
     if (user.age && user.age < 18) {
@@ -196,27 +179,7 @@ export const ValidationForm: React.FC = () => {
   React.useEffect(() => {
     isMajor();
   }, [user.age]);
-  //
-  const handlePassword = (e: any) => {
-    setUser({ ...user, password: e.target.value });
-
-    isStrongPassword();
-  };
-
-  React.useEffect(() => {
-    isStrongPassword();
-  }, [isPasswordStrong, user.password]);
-
-  //
-  const handleConfirmPassword = (e: any) => {
-    setUser({ ...user, confirmPassword: e.target.value });
-
-    isStrongPassword();
-  };
-
-  React.useEffect(() => {
-    isPasswordConfirmed();
-  }, [isConfirmedPassword, user.confirmPassword]);
+  
   //
 
   const handleDev = (e: any) => {
@@ -235,13 +198,15 @@ export const ValidationForm: React.FC = () => {
   }, [isConfirmedPassword, user.dev]);
 
 // Hooks
-    const { isValidEmail } = isValidInput({
-      user,
-      setStartValidationColor,
-      startValidationColor,
-      isEmailValid,
-      setIsEmailValid,
-    });
+    const { isValidEmail, isStrongPassword, isPasswordConfirmed } =
+      isValidInput({
+        user,
+        setStartValidationColor,
+        startValidationColor,
+        setIsEmailValid,
+        setIsPasswordStrong,
+        setIsConfirmedPassword,
+      });
 
 
   return (
@@ -273,58 +238,23 @@ export const ValidationForm: React.FC = () => {
       user={user}
       />
       <br />
-      <input
-        className={
-          isPasswordStrong === true
-            ? "valid"
-            : isPasswordStrong === false ||
-              (startValidationColor.password && !isPasswordStrong) ||
-              firstValuePswStrong
-            ? "invalid"
-            : ""
-        }
-        value={user.password}
-        onChange={handlePassword}
-        type="password"
-        placeholder="Password.."
+    <PasswordInput
+     firstValuePswStrong={firstValuePswStrong}
+     isPasswordStrong={isPasswordStrong}
+     isStrongPassword={isStrongPassword}
+     setUser={setUser}
+     startValidationColor={startValidationColor}
+     user={user}
+     />
+      <br />
+      <ConfirmedPassword
+      isConfirmedPassword={isConfirmedPassword}
+      isPasswordConfirmed={isPasswordConfirmed}
+      isStrongPassword={isStrongPassword}
+      setUser={setUser}
+      startValidationColor={startValidationColor}
+      user={user}
       />
-      <br />
-      <div className="boxTxtError">
-        <span className="errorText">
-          {user.password !== "" && !isPasswordStrong && "Weak password!"}
-        </span>
-        {user.password === "" && firstValuePswStrong && (
-          <span className="errorText">You must refill this input</span>
-        )}
-      </div>
-      <br />
-      <input
-        className={
-          user.password !== user.confirmPassword
-            ? "passwordNotConfirmed"
-            : isConfirmedPassword === true
-            ? "valid"
-            : isConfirmedPassword === false ||
-              (startValidationColor.confirmPassword && !isConfirmedPassword)
-            ? "invalid"
-            : ""
-        }
-        value={user.confirmPassword}
-        onChange={handleConfirmPassword}
-        type="password"
-        placeholder="Confirm password"
-      />
-      <br />
-      <div className="boxTxtError">
-        <span className="errorText">
-          {(user.password !== user.confirmPassword &&
-            user.confirmPassword !== "" &&
-            "Repeat password!") ||
-            (user.confirmPassword !== "" &&
-              !isConfirmedPassword &&
-              "Repeat password!")}
-        </span>
-      </div>
       <br />
       <input
         className={
